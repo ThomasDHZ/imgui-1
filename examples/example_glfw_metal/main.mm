@@ -1,12 +1,9 @@
-// Dear ImGui: standalone example application for GLFW + Metal, using programmable pipeline
-// (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context creation, etc.)
-// If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
-// Read online: https://github.com/ocornut/imgui/tree/master/docs
+// ImGui - standalone example application for GLFW + Metal, using programmable pipeline
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_metal.h"
-#include <stdio.h>
 
 #define GLFW_INCLUDE_NONE
 #define GLFW_EXPOSE_NATIVE_COCOA
@@ -16,6 +13,8 @@
 #import <Metal/Metal.h>
 #import <QuartzCore/QuartzCore.h>
 
+#include <stdio.h>
+
 static void glfw_error_callback(int error, const char* description)
 {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
@@ -23,7 +22,7 @@ static void glfw_error_callback(int error, const char* description)
 
 int main(int, char**)
 {
-    // Setup Dear ImGui context
+    // Setup Dear ImGui binding
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -60,10 +59,9 @@ int main(int, char**)
     if (window == NULL)
         return 1;
 
-    id <MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id <MTLDevice> device = MTLCreateSystemDefaultDevice();;
     id <MTLCommandQueue> commandQueue = [device newCommandQueue];
 
-    // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplMetal_Init(device);
 
@@ -99,7 +97,7 @@ int main(int, char**)
             id<CAMetalDrawable> drawable = [layer nextDrawable];
 
             id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
-            renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(clear_color[0] * clear_color[3], clear_color[1] * clear_color[3], clear_color[2] * clear_color[3], clear_color[3]);
+            renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(clear_color[0], clear_color[1], clear_color[2], clear_color[3]);
             renderPassDescriptor.colorAttachments[0].texture = drawable.texture;
             renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
             renderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
